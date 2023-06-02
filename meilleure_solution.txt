@@ -1,0 +1,26 @@
+On a adopté une approche par groupe, c'est-à-dire qu'on prenait un groupe, puis on en prenait un autre et ainsi de suite tout en respectant la capacité du pont. Une meilleure solution aurait de regarder par personne : soit elle peut monter, soit elle ne peut pas et donc on fait sortir une personne du pont. On aurait eu ainsi plus de précision dans le temps total de passage. Voici ci-dessous un algorithme qui se rapproche de cette solution :
+
+def fait_passer_personnes(personnes, pont) : void
+	temps_sortie_total = 0
+	personnes_sur_pont = { 'personnes' : {}, 'poids_total' : 0}
+	i = 0
+	
+	pour chaque personne de personnes
+		# elle ne peut pas monter sur le pont
+		si personnes_sur_pont['poids_total'] + personne['poids'] > capacite du pont
+			temps_sortie_total += temps_sortie du premier element de personnes_sur_pont['personnes']
+			personnes_sur_pont['poids_total'] -= poids du premier element de personnes_sur_pont['personnes']
+			retirer premier element de personnes_sur_pont['personnes']
+
+		# elle peut monter sur le pont
+		sinon
+			i++
+			si personnes_sur_pont['personnes'] est vide
+				alors personnes_sur_pont['personnes'][i]['temps_sortie'] += (pont['distance'] / personne['vitesse'])
+			sinon
+				alors personnes_sur_pont['personnes'][i]['temps_sortie'] = temps_sortie du premier element de personnes_sur_pont['personnes']
+			personnes_sur_pont['personnes'][i]['poids'] = personne['poids']
+			personnes_sur_pont['poids_total'] += personne['poids']
+
+		si personne est le dernier de personnes
+			alors retourner temps_sortie_total + personnes_sur_pont['personnes'][i]['temps_sortie']
