@@ -10,7 +10,7 @@ def recuperer_donnees(chemin_fichier):
         donnees = fichier.readlines()
 
     # ligne 2 = longueur du pont, ligne 4 = capacité du pont
-    pont = (int(donnees[1]), int(donnees[3]))
+    pont = [int(donnees[1]), int(donnees[3])]
 
     # ligne 6 = nombre de personnes
     nb_personnes = int(donnees[5])
@@ -20,7 +20,7 @@ def recuperer_donnees(chemin_fichier):
     for i in range(6, 6 + (2 * nb_personnes), 2):
         poids = int(donnees[i].strip())
         vitesse = int(donnees[i+1].strip())
-        personnes.append((poids, vitesse))
+        personnes.append([poids, vitesse])
 
     return pont, personnes
 
@@ -45,29 +45,32 @@ def traverser_personnes(pont, personnes):
     i = 0
     temps_calcule = 0
     poids_total = 0
-    personnes_restantes = personnes
     personnes_sur_pont = []
 
-    while personnes_restantes:
+    for i in range(len(personnes)):
         poids_personne, vitesse_personne = personnes[i]
         # la personne peut monter sur le pont
         if poids_total + poids_personne <= pont[1]:
+            personnes[i][1] = min(vitesse_personne, personnes[i-1][1])
             personnes_sur_pont.append(personnes[i])
             poids_total += poids_personne
-            i = i + 1 if i < 29 else i
-        # la personne ne peut pas monter sur le pont
         else:
-            temps_passage = 0
-            for personne in personnes_sur_pont:
-                poids_personne, vitesse_personne = personne
-                temps_personne = pont[0] / vitesse_personne
-                temps_passage = max(temps_passage, temps_personne)
-
-            # mettre à jour le temps total et les personnes restantes
-            temps_calcule += temps_passage
-            personnes_restantes = [personne for personne in personnes_restantes if personne not in personnes_sur_pont]
-            personnes_sur_pont = []
-            poids_total = 0
+            est_premiere_personne = True
+            for personne_sur_pont in personnes_sur_pont:
+                poids_personne_sur_pont, vitesse_personne_sur_pont = personne_sur_pont
+                if est_premiere_personne:
+                    vitesse_premiere_personne = vitesse_personne_sur_pont
+                    poids_total -= poids_personne_sur_pont
+                    personnes_sur_pont.remove(personne_sur_pont)
+                    est_premiere_personne = False
+                else:
+                    if vitesse_personne_sur_pont == vitesse_premiere_personne:
+                        poids_total -= poids_personne_sur_pont
+                        personnes_sur_pont.remove(personne_sur_pont)
+                    else:
+                        temps_calcule += pont[0] / vitesse_premiere_personne
+                        break
+            i -= 1
     
     end_time = time.time()
     execution_time = (end_time - start_time) * 1000

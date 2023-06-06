@@ -1,0 +1,15 @@
+Tant qu'il y a des singes en attente dans le groupe de singes en attente :
+Vérifie si le poids total actuel du pont plus le poids du singe en attente est inférieur ou égal à la capacité maximale du pont.
+Si oui, le singe peut traverser :
+Calcule le temps de sortie prévu en ajoutant le temps cumulé au temps de traversée du singe.
+Compare le temps de sortie prévu avec le temps de sortie du dernier singe en cours de passage et met à jour si nécessaire.
+Ajoute le poids du singe au poids total actuel du pont.
+Met à jour le temps de traversée du singe avec le temps de sortie prévu.
+Ajoute le singe en cours de passage au groupe en cours de passage.
+Retire le singe du groupe de singes en attente.
+Sinon, si le poids total du pont dépasse la capacité maximale avec l'ajout du singe, le singe ne peut pas traverser immédiatement :
+Vérifie si le poids total du pont moins le poids du premier singe en cours de passage plus le poids du singe en attente est inférieur à la capacité maximale du pont.
+Si oui, le singe en attente peut traverser plus tôt que le premier singe en cours de passage :
+Met à jour le temps cumulé avec le temps de traversée du premier singe en cours de passage.
+Soustrait le poids du premier singe en cours de passage du poids total du pont.
+Retire le premier singe en cours de passage du groupe en cours de passage.
